@@ -12,6 +12,13 @@
 .content {
   flex: 4;
   padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  margin-top: auto;
 }
 
 .wrapper {

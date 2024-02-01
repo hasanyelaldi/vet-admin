@@ -1,21 +1,21 @@
-import { deleteUser } from "@/app/lib/actions";
-import { fetchUsers } from "@/app/lib/data";
-import Pagination from "@/app/ui/dashboard/pagination/pagination";
-import Search from "@/app/ui/dashboard/search/search";
-import styles from "@/app/ui/dashboard/users/users.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import styles from "@/app/ui/dashboard/pets/pets.module.css";
+import Search from "@/app/ui/dashboard/search/search";
+import Pagination from "@/app/ui/dashboard/pagination/pagination";
+import { fetchPets } from "@/app/lib/data";
+import { deletePet } from "@/app/lib/actions";
 
-const UsersPage = async ({ searchParams }) => {
+const PetsPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
-  const { count, users } = await fetchUsers(q, page);
+  const { count, pets } = await fetchPets(q, page);
 
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Search for a user..." />
-        <Link href="/dashboard/users/add">
+        <Search placeholder="Search for a pet..." />
+        <Link href="/dashboard/pets/add">
           <button className={styles.addButton}>Add New</button>
         </Link>
       </div>
@@ -23,43 +23,45 @@ const UsersPage = async ({ searchParams }) => {
         <thead>
           <tr>
             <td>Name</td>
-            <td>Email</td>
-            <td>Created At</td>
-            <td>Role</td>
-            <td>Status</td>
+            <td>Type</td>
+            <td>Species</td>
+            <td>Age</td>
+            <td>Gender</td>
+            <td>Weight</td>
             <td>Action</td>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
+          {pets.map((pet) => (
+            <tr key={pet.id}>
               <td>
-                <div className={styles.user}>
+                <div className={styles.pet}>
                   <Image
-                    src={user.img || "/noavatar.png"}
+                    src={pet.img || "/noavatar.png"}
                     alt=""
                     width={40}
                     height={40}
-                    className={styles.userImage}
+                    className={styles.petImage}
                   />
-                  {user.username}
+                  {pet.name}
                 </div>
               </td>
-              <td>{user.email}</td>
-              <td>{user.createdAt?.toString().slice(4, 16)}</td>
-              <td>{user.isAdmin ? "Admin" : "Client"}</td>
-              <td>{user.isActive ? "active" : "passive"}</td>
+              <td>{pet.type}</td>
+              <td>{pet.species}</td>
+              <td>{pet.age}</td>
+              <td>{pet.gender}</td>
+              <td>{pet.weight}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/dashboard/users/${user.id}`}>
+                  <Link href={`/dashboard/pets/${pet.id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       View
                     </button>
                   </Link>
                   <form 
-                  action={deleteUser}
+                  action={deletePet}
                   >
-                    <input type="hidden" name="id" value={(user.id)} />
+                    <input type="hidden" name="id" value={pet.id} />
                     <button className={`${styles.button} ${styles.delete}`}>
                       Delete
                     </button>
@@ -75,4 +77,4 @@ const UsersPage = async ({ searchParams }) => {
   );
 };
 
-export default UsersPage;
+export default PetsPage;
